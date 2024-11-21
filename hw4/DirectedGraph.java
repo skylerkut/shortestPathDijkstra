@@ -146,9 +146,37 @@ public class DirectedGraph<V> implements Graph<V> {
         Map<V, Double> dist = new HashMap<V, Double>();
         Map<V, V> pred = new HashMap<V, V>();
 
-        /* TODO */
-
+        BinaryMinHeap<V> priorityQ = new BinaryMinHeap<>((v1, v2) -> Double.compare(dist.get(v1), dist.get(v2)));
+        
+        // Set initial distances as infinite and add vertices to heap       
+        for (V vertex : adjList.keySet()) {
+            dist.put(vertex, Double.MAX_VALUE);
+            priorityQ.add(vertex);
+        }
+        dist.put(source, 0.0); //Source distance is 0
+        priorityQ.keyDecreased(source); //Source is root in heap
+        
+        
+        while (priorityQ.size() > 0) { //Not empty
+        	V currentV = priorityQ.extractMin(); //Get smallest dist
+        	
+        	for(V neighbor : adjList.get(currentV)) {
+       
+        		// Compute new distance
+                Tuple<V, V> edge = Tuple.create(currentV, neighbor); //Get edge
+                
+                double weight = weights.get(edge);
+                double newDist = dist.get(currentV) + weight; 
+        	
+                if (newDist < dist.get(neighbor)) {
+                    dist.put(neighbor, newDist); 
+                    pred.put(neighbor, currentV);
+                	priorityQ.keyDecreased(neighbor);
+                }
+   
+        	}//for
+        }//while
+        
         return Tuple.create(dist, pred);
     }
-
 }
