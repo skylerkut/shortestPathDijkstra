@@ -28,8 +28,8 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 * @param item An element not in the heap that will be added to it.
 	 */
 	@Override
-	public void add(T item) {
-		if (!heap.contains(item))
+	public void add(T item) { //O(log n)
+		if (!location.containsKey(item))
 			heap.add(item);
 		
 		//Update location
@@ -44,7 +44,7 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 * @return Returns the minimum element of the heap without removing it.
 	 */
 	@Override
-	public T getMin() {
+	public T getMin() { //O(1)
 		return heap.get(0);
 	}
 
@@ -54,7 +54,7 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 * @return The minimum element that was in the heap when the method was invoked.
 	 */
 	@Override
-	public T extractMin() {
+	public T extractMin() { //O(log n)
 		T min = heap.get(0);
 
 		//Maintain heap
@@ -78,7 +78,7 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 * @param item An item in the heap that has had its key decreased.
 	 */
 	@Override
-	public void keyDecreased(T item) {
+	public void keyDecreased(T item) { //O(log n)
 		int index = location.get(item);
 		heapifyUp(index);
 	}
@@ -88,16 +88,14 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 * 
 	 * @param index
 	 */
-	private void heapifyUp(int index) {
+	private void heapifyUp(int index) { //O(log n)
 		while (index > 0) {
 			int parentIndex = (index - 1) / 2;
 			if (comp.compare(heap.get(index), heap.get(parentIndex)) >= 0) { // Max height
-//	            System.out.println("heapifyUp Index: " + index + ", New ParentIndex " + parentIndex);
 				break;
 			}
 			swap(index, parentIndex);
 			index = parentIndex;
-
 		}
 	}
 	
@@ -106,7 +104,7 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 *  
 	 * @param index
 	 */
-	private void heapifyDown(int index) {
+	private void heapifyDown(int index) { //O(log n)
 	    int size = heap.size();
 	    while (true) { //Until break condition
 	        int leftChild = 2 * index + 1;
@@ -136,11 +134,12 @@ public class BinaryMinHeap<T> extends PurePriorityQueue<T> {
 	 * @param i
 	 * @param j
 	 */
-	private void swap(int i, int j) {
+	private void swap(int i, int j) { //O(1)
 		T temp = heap.get(i);
 		heap.set(i, heap.get(j));
 		heap.set(j, temp);
 		location.put(heap.get(i), i);
 		location.put(heap.get(j), j);
 	}
+
 }

@@ -89,7 +89,40 @@ public class JunitTests {
 		assertTrue(preds.containsKey(v1)); // Ensure v1 is in the map
 		assertEquals("b", preds.get(v1)); // v1's predecessor should be v2
 	}
+	
 
+	@Test
+	public void testDist3() {
+		 String v3 = "c";
+		 String v4 = "d";
+		 
+		g.addVertex(v3);
+		g.addVertex(v4);
+		
+		g.addEdge(v1, v2);
+		g.addEdge(v2, v1);
+		g.addEdge(v1, v3);
+		g.addEdge(v3, v4);
+		g.addEdge(v2, v4);
+
+
+		weights.put(Tuple.create(v1, v2), 2.0);
+		weights.put(Tuple.create(v2, v1), 3.0);
+		weights.put(Tuple.create(v1, v3), 2.0);
+		weights.put(Tuple.create(v3, v4), 4.0);
+		weights.put(Tuple.create(v2, v4), 0.0);
+
+
+		var distsAndPreds = g.dijkstras(v2, weights);
+		
+		Map<String, Double> dists = distsAndPreds.getFirst();
+		Map<String, String> preds = distsAndPreds.getSecond();
+		
+		System.out.println("Test 3 Dists " + dists);
+		System.out.println("\nTest 3 Preds " + preds);
+
+	}
+	
 	@Test
 	public void testHeap() {
 		HashMap<String, Integer> m = new HashMap<String, Integer>();
